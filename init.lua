@@ -3,7 +3,7 @@
 -- Configuration!
 DEVICE_SECRET = 'JSONWEBTOKENSECRET'
 POST_URL = 'http://URL-TO-YOUR-SERVER.COM/PATH-TO-YOUR-ENDPOINT'
-NTP_IP = '5.100.133.221'
+NTP_IP = 'de.pool.ntp.org' -- or set to your country or simply 'pool.ntp.org'
 WIFI_SSID = 'your wifi ssid'
 WIFI_PASS = 'your wifi password'
 WIFI_CONFIG = {
