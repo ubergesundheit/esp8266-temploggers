@@ -179,3 +179,5 @@ function getTimestamp(callback,errorCallback)
     errorCallback
   )
 end
+
+-- End of adapted Minix 3 'Minix/lib/ansi/gmtime.c' code
