@@ -2,17 +2,17 @@
 
 -- Configuration!
 DEVICE_SECRET = 'JSONWEBTOKENSECRET'
-POST_URL = 'http://URL-TO-YOUR-SERVER.COM/PATH-TO-YOUR-ENDPOINT'
+POST_URL = ''
 NTP_IP = 'de.pool.ntp.org' -- or set to your country or simply 'pool.ntp.org'
-WIFI_SSID = 'your wifi ssid'
-WIFI_PASS = 'your wifi password'
+WIFI_SSID = ''
+WIFI_PASS = ''
 WIFI_CONFIG = {
-  ip="192.168.1.248",
+  ip="10.0.0.248",
   netmask="255.255.255.0",
-  gateway="192.168.1.1"
+  gateway="10.0.0.1"
 }
 COLLECTION = "some_string"
-POST_DELAY = 300000 -- in milliseconds
+POST_DELAY = 60000 -- in milliseconds
 
 -- name of the file which does the following:
 -- initializes the usesd sensor and implements `getData`
@@ -29,11 +29,18 @@ tmr.alarm(1, 1000, 1, function()
     print("IP unavailable, Waiting...")
   else
     tmr.stop(1)
-    print("Config done, IP is "..wifi.sta.getip())
-    dofile(SENSOR..".lc")
-    dofile("utils.lc")
-    publishStatus()
-    -- send data every once in a while (every minute)
-    tmr.alarm(2, POST_DELAY, 1, publishStatus)
+    sntp.sync("de.pool.ntp.org",
+      function(unixtime,usec,server)
+        rtctime.set(unixtime,usec)
+        print(unixtime)
+        otp = require("otp")
+        totp = otp.new_totp_from_key("N5LDS33PM5SS44TJNBQWQ6DJMM======")
+        tmr.alarm(2, 5000, 1, function()
+          print(totp:generate())
+          print(node.heap())
+        end)
+      end,
+      function() end
+    )
   end
 end)
